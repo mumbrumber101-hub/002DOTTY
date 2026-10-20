@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dotty: Reader’s Companion</title>
+  <meta name="robots" content="noindex, follow">
+  <link rel="canonical" href="https://mumbrumber101-hub.github.io/002DOTTY/">
+  <style>
+    html, body { margin: 0; height: 100%; overflow: hidden; background: #faf9f6; }
+    iframe { display: block; width: 100%; height: 100%; height: 100dvh; border: 0; }
+  </style>
+</head>
+<body>
+  <iframe id="guide" src="./index.html" title="Dotty: Reader’s Companion"></iframe>
+  <script>
+    const guide = document.getElementById('guide');
+
+    function openLinkedEntry() {
+      const doc = guide.contentDocument;
+      if (!doc || doc.readyState !== 'complete') return;
+
+      let id;
+      try { id = decodeURIComponent(window.location.hash.slice(1)); }
+      catch (_) { return; }
+      if (!id) return;
+
+      const character = Array.from(doc.querySelectorAll('.entity-item[data-character]'))
+        .find(item => item.dataset.character === id);
+      const target = character || doc.getElementById(id);
+      if (!target) return;
+
+      const outlines = [];
+      for (let parent = target.parentElement; parent; parent = parent.parentElement) {
+        if (parent.matches('.outline-l1.collapsed')) outlines.unshift(parent);
+      }
+      outlines.forEach(outline => outline.querySelector('.outline-l1-header')?.click());
+
+      target.scrollIntoView({ block: 'center', behavior: 'instant' });
+      if (character) character.click();
+    }
+
+    guide.addEventListener('load', openLinkedEntry);
+    window.addEventListener('hashchange', openLinkedEntry);
+  </script>
+</body>
+</html>
